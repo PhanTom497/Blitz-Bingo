@@ -23,7 +23,7 @@ export function QuickBetChips({ selectedAmount, onSelect, maxBet, disabled }: Qu
         <div className="space-y-3">
             <div className="flex items-center justify-between">
                 <p className="text-xs text-secondary uppercase tracking-wider">Quick Bet</p>
-                <p className="text-xs text-secondary">Max: <span className="text-flash font-bold">{maxBet}</span> $FLASH</p>
+                <p className="text-xs text-secondary">Max: <span className="text-flash font-bold">{maxBet}</span> $BLITZ</p>
             </div>
 
             <div className="flex gap-2 justify-center flex-wrap">
@@ -94,7 +94,7 @@ export function QuickBetChips({ selectedAmount, onSelect, maxBet, disabled }: Qu
                 transition={{ type: 'spring', stiffness: 400 }}
             >
                 <span className="text-2xl font-black text-flash">{selectedAmount}</span>
-                <span className="text-lg text-secondary ml-2">$FLASH</span>
+                <span className="text-lg text-secondary ml-2">$BLITZ</span>
             </motion.div>
         </div>
     );
