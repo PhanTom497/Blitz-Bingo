@@ -1,100 +1,86 @@
-# ⚡ Blitz Bingo: High-Stakes PvP Gaming on Linera
+# ⚡ Blitz Bingo
 
-> **Project Status**: Phase 1 Complete (Dice Bingo Implemented)  
-> **Backend**: Rust (Linera SDK)  
-> **Frontend**: React + TypeScript + Vite  
-> **Network**: Linera Conway Testnet
+> **High-Stakes Dice Bingo on the Linera Network**
 
----
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Play%20Now-purple?style=for-the-badge&logo=vercel)](https://blitz-bingo.vercel.app/)
+[![Linera](https://img.shields.io/badge/Built%20On-Linera-blue?style=for-the-badge)](https://linera.io)
 
-## 📖 Project Overview
-
-**Blitz Bingo** is a decentralized, high-performance gaming platform built on the **Linera** blockchain. It leverages Linera's **micro-rollup** architecture to deliver near-instant finality and low-latency gameplay.
-
-The project demonstrates:
-1.  **Escrow & State Management**: Secure handling of wagers and game state persistence.
-2.  **Verifiable Randomness**: On-chain RNG for fair gameplay.
+**Blitz Bingo** is a fully decentralized, high-performance solo gaming application built on the **Linera** blockchain. It demonstrates the power of Linera's **micro-rollup** architecture to deliver a "Web2-like" user experience with sub-second finality, eliminating the lag typically associated with blockchain gaming.
 
 ---
 
-## 🛠 Technology Stack
+## 🎮 The Game
 
-### Backend (Rust / Linera WASM)
-*   **Linera SDK**: Core blockchain framework for micro-rollups.
-*   **Rust**: Primary language for contract and service logic.
-*   **GraphQL**: API layer for querying chain state and submitting mutations.
-*   **Bincode/Serde**: Efficient serialization for cross-chain messages.
-*   **Wasm32**: Compilation target for on-chain execution.
-
-### Frontend (React / TypeScript)
-*   **Vite**: Fast build tool and dev server.
-*   **React 18**: UI library with Hooks pattern.
-*   **Framer Motion**: Advanced animations and "Glassmorphism" UI effects.
-*   **Tailwind CSS**: Utility-first styling for responsive design.
-*   **GraphQL Request**: Lightweight client for Linera service interaction.
+Blitz Bingo combines the thrill of dice rolls with the strategy of Bingo.
+- **Roll & Match**: Roll 5 dice to match numbers on your unique 5x5 Bingo card.
+- **Instant Actions**: Every roll, bet, and claim is a blockchain transaction that confirms instantly.
+- **Fair Play**: Game logic and randomness are enforced by on-chain WASM smart contracts.
+- **Provable Fairness**: All outcomes are verifiable on the Linera network.
 
 ---
 
-## 🏗 Architecture & Design
+## 🏗 Architecture & Linera Protocol Features
 
-### Micro-Rollup Pattern
-Blitz Bingo runs as a persistent **Application** on the Linera network.
-*   **Application Chain**: The "Server" chain that holds global state (active matches, high scores, escrow).
-*   **User Chains**: Each player operates on their own micro-chain, sending cross-chain messages to the Application Chain to perform actions (Bet, Move, Join).
+Blitz Bingo is natively designed for Linera's **multi-chain (micro-chain)** paradigm. Unlike traditional EVM dApps that congested a single global state, Blitz Bingo gives every player their own "User Chain".
 
-### Data Flow
-1.  **Queries (Reads)**: Frontend directly queries the local Linera Service (`localhost:8080`) which syncs state from the Application Chain.
-2.  **Mutations (Writes)**: Single-chain operations (immediate execution).
+### Key Linera Features Used:
+1.  **Micro-Rollups**:
+    - **User Chains**: Each player acts on their own lightweight chain (`User Chain`). This ensures parallel execution and infinite scalability.
+    - **Application Chain**: A central chain acts as the "Server" to coordinate global state, but gameplay actions happen on user chains first.
+2.  **Fast Finality**:
+    - Linera’s specific consensus allows for near-instant block confirmation, enabling a snappy "click-and-play" experience without waiting for 15-second block times.
+3.  **WASM Smart Contracts (Rust)**:
+    - Game logic is written in Rust and compiled to WebAssembly (Wasm32).
+    - Contracts handle complex state transitions: `Bet -> Roll -> Update Card -> payout/loss`.
+4.  **GraphQL Integration**:
+    - The frontend communicates with the blockchain via a generated GraphQL schema, allowing for precise and efficient data fetching.
 
----
-
-## 🚀 Features Implemented
-
-### Phase 1: Dice Bingo (Single Player)
-*   **Mechanic**: Roll 5 dice to match numbers on a Bingo card.
-*   **Economy**: Pay entry fee, pay per roll, win multipliers (up to 10x).
-*   **Safety**: Optimistic UI with polling-based transaction verification.
-*   **Components**: 
-    *   `BingoCard.tsx`: Grid visualization with win line highlighting.
-    *   `DiceShaker.tsx`: 3D-style dice animation.
-    *   `AssetFaucets.tsx`: Token management and minting interface.
-    *   `WinModal.tsx`: Victory celebration and prize claiming.
-    *   `QuickBetChips.tsx`: Rapid betting controls.
-    *   `GameStats.tsx`: Live session tracking.
-
----
-
-## 📂 Project Structure
-
-### `/blitz-bingo` (Backend)
-
-| File | Purpose |
-|------|---------|
-| `src/lib.rs` | **Type Definitions**. `Operation` enum. Defines the shared protocol. |
-| `src/contract.rs` | **Business Logic**. Handles game state, escrow locking, and verifiable randomness. |
-| `src/service.rs` | **API Layer**. Exposes GraphQL queries (`currentCard`, `lastRoll`) and mutations. |
-| `src/state.rs` | **Persistence**. `BlitzBingoState` struct using `MapView` for scalable storage. |
-
-### `/blitz-bingo-frontend` (Frontend)
-
-| Directory/File | Purpose |
-|----------------|---------|
-| `src/components/` | **UI Components**. |
-| `src/hooks/useGame.ts` | **Game Hook**. Manages GraphQL polling and optimistic UI updates. |
-| `src/hooks/useLinera.ts` | **Core Hook**. Wallet connection and logic. |
-| `src/App.tsx` | **Router**. Tab navigation and global Layout. |
+### Architecture Diagram
+```mermaid
+graph TD
+    User[Player] -->|1. Action (Bet/Roll)| Frontend[React Frontend]
+    Frontend -->|2. GraphQL Mutation| Client[Linera Client / Wallet]
+    Client -->|3. Propose Block| UserChain[User Micro-Chain]
+    UserChain -->|4. Cross-Chain Message| AppChain[Application Chain]
+    AppChain -->|5. Verify & Execute| Logic[WASM Contract]
+    Logic -->|6. Return Result| UserChain
+    UserChain -->|7. Finalize| Frontend
+```
 
 ---
 
-## 📥 Setup & Deployment
+## 🛠 Tech Stack
+
+### Backend (On-Chain)
+- **Language**: Rust
+- **Platform**: Linera SDK (WASM)
+- **State Management**: `MapView` for scalable storage
+- **Serialization**: `Bincode` & `Serde`
+
+### Frontend (Client)
+- **Framework**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS + Custom "Glassmorphism" Design
+- **Animations**: Framer Motion
+- **Connection**: Custom `useLinera` hook interfacing with Linera GraphQL Service
+
+---
+
+## 🚀 Setup & Local Development
+
+To run Blitz Bingo locally or deploy your own instance:
+
+### Prerequisites
+- Rust & Cargo
+- Linera Toolchain (`linera`, `linera-proxy`, `linera-service`)
 
 ### 1. Build Contracts
 ```bash
-cd blitz-bingo
+git clone https://github.com/your-repo/blitz-bingo.git
+cd blitz-bingo/Game/blitz-bingo
 cargo build --release --target wasm32-unknown-unknown
 ```
 
-### 2. Deploy to Testnet
+### 2. Deploy to Linera Testnet
 ```bash
 linera wallet init --faucet https://faucet.testnet-conway.linera.net
 linera publish-and-create \
@@ -102,16 +88,22 @@ linera publish-and-create \
   target/wasm32-unknown-unknown/release/blitz_bingo_service.wasm \
   --json-argument 'null'
 ```
-*   Save the resulting **Application ID**.
+*Note the Application ID generated from this step.*
 
 ### 3. Run Frontend
 ```bash
-cd blitz-bingo-frontend
-# Update .env or use UI settings to set App ID & Chain ID
+cd ../blitz-bingo-frontend
+# Create .env file with your VITE_BLITZ_APP_ID
+npm install
 npm run dev
 ```
 
 ---
 
-## 🔮 Future Roadmap (Phase 3)
-*   **Tournaments**: Bracket-style elimination with pot accumulation.
+## 👥 Team & Contact
+
+**Submission for Linera Buildathon Wave 6**
+
+- **Ethereum Wallet (for Grant Distribution)**: `0xE1782602C8994aA3997fd30Df84BcB5d498F674f`
+
+*Building the future of decentralized gaming with fast finality.*
