@@ -2,6 +2,10 @@
 
 > **High-Stakes Dice Bingo on the Linera Network**
 
+- **Live Game**: [blitz-bingo.vercel.app](https://blitz-bingo.vercel.app/)
+- **Video Demo**: [Watch on YouTube](https://youtu.be/CHiQS7OlVvE)
+- **Ethereum Wallet (for Grant Distribution)**: `0xE1782602C8994aA3997fd30Df84BcB5d498F674f`
+
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Play%20Now-purple?style=for-the-badge&logo=vercel)](https://blitz-bingo.vercel.app/)
 [![Linera](https://img.shields.io/badge/Built%20On-Linera-blue?style=for-the-badge)](https://linera.io)
 
@@ -12,7 +16,7 @@
 ## 🎮 The Game
 
 Blitz Bingo combines the thrill of dice rolls with the strategy of Bingo.
-- **Roll & Match**: Roll 5 dice to match numbers on your unique 5x5 Bingo card.
+- **Roll & Match**: Roll 4 dice to match numbers on your unique 5x5 Bingo card.
 - **Instant Actions**: Every roll, bet, and claim is a blockchain transaction that confirms instantly.
 - **Fair Play**: Game logic and randomness are enforced by on-chain WASM smart contracts.
 - **Provable Fairness**: All outcomes are verifiable on the Linera network.
@@ -38,13 +42,13 @@ Blitz Bingo is natively designed for Linera's **multi-chain (micro-chain)** para
 ### Architecture Diagram
 ```mermaid
 graph TD
-    User[Player] -->|1. Action (Bet/Roll)| Frontend[React Frontend]
-    Frontend -->|2. GraphQL Mutation| Client[Linera Client / Wallet]
-    Client -->|3. Propose Block| UserChain[User Micro-Chain]
-    UserChain -->|4. Cross-Chain Message| AppChain[Application Chain]
-    AppChain -->|5. Verify & Execute| Logic[WASM Contract]
-    Logic -->|6. Return Result| UserChain
-    UserChain -->|7. Finalize| Frontend
+    User[Player] -->|"1. Action (Bet/Roll)"| Frontend[React Frontend]
+    Frontend -->|"2. GraphQL Mutation"| Client["Linera Client / Wallet"]
+    Client -->|"3. Propose Block"| UserChain[User Micro-Chain]
+    UserChain -->|"4. Cross-Chain Message"| AppChain[Application Chain]
+    AppChain -->|"5. Verify & Execute"| Logic[WASM Contract]
+    Logic -->|"6. Return Result"| UserChain
+    UserChain -->|"7. Finalize"| Frontend
 ```
 
 ---
@@ -101,9 +105,8 @@ npm run dev
 ---
 
 ## 👥 Team & Contact
-
+Lakshay Panchal
+lakshaypanchal21@gmail.com
 **Submission for Linera Buildathon Wave 6**
-
-- **Ethereum Wallet (for Grant Distribution)**: `0xE1782602C8994aA3997fd30Df84BcB5d498F674f`
 
 *Building the future of decentralized gaming with fast finality.*
